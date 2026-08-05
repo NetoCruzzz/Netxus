@@ -1,4 +1,42 @@
 # Netxus
-Contributors: Ernesto Cruz, Carlos Sepulveda, Ulyses Ulloa-Luna
 
-Netxus is an anonymous posting form were users post and reply on movies. Using tags the users communicate the movie, watch status, head cannon, ect. Why anonymous? Users create alternate accounts to post certain content; adding anonymity helps users express their opinion. Searching via title or group of tags users can find the posts.
+## Project Description
+
+Netxus is a virtual forum inspired social web application developed using Django. Users can create posts, ask questions, participate in discussions through comments, and share upcoming events with the community. The goal is to provide a centralized platform for communication and event sharing.
+
+## Technologies
+
+- Python
+- Django
+- SQLite
+- HTML/CSS
+- Git & GitHub
+
+## Team Members
+
+- Ernesto Cruz
+- Carlos
+- Ulyses
+
+## Agile Planning
+
+### Sprint 1
+- Create GitHub repository
+- Configure Django environment
+- Set up project structure
+- Assign team roles
+
+### Sprint 2
+- User registration and login
+- Create homepage
+- Build navigation bar
+
+### Sprint 3
+- Create, edit, and delete posts
+- Comment system
+
+### Sprint 4
+- Event reminders
+- Testing
+- Documentation
+- Final presentation
