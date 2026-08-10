@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
+from .models import Movies
+from .forms import PostForm
 
 
 #home view
@@ -48,3 +50,33 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+def movies(request, movie_id):
+    movie = get_object_or_404(
+        Movies, 
+        id=movie_id
+    )
+    posts = movie.posts.all().order_by("-created_at")
+
+    return render(
+        request,
+        "posts/movies.html",
+        {
+            "movie": movie,
+            "posts": posts
+        }
+
+    )
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = PostForm()
+
+    return render(request,
+                  "create_post.html",
+                  {"form": form}
+                  )
