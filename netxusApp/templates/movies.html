@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>{{movie.title}}</title>
+    </head>
+    <body>
+        <h1>{{movie.title}}</h1>
+
+        <p>{{movie.description}}</p>
+        <hr>
+
+            <a href="{% url 'create_post' %}">
+                Create Post
+            </a>
+        <hr>
+        {% for post in posts %}
+            <h2>{{post.title}}</h2> 
+
+            <p>{{post.content}}</p>
+
+            <small>{{post.created_at}}</small>
+        {%empty%}
+
+            <p>No posts yet.</p>
+            
+        {% endfor %}
+    </body>
+</html>
