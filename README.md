@@ -41,6 +41,9 @@ Netxus is a virtual forum inspired social web application developed using Django
 - Documentation
 - Final presentation
 
+## Prototypes
+- screenshots "protoypes" folder
+
 ## Figma Link
 - https://www.figma.com/design/ZNx574hXGouiyGHBUN1sgK/Netxus?node-id=0-1&t=jKqxoWfIuVL3lQ2J-1
 
