@@ -52,9 +52,9 @@
         {% if user.is_authenticated %}
 
           <li class="nav-item">
-            <span class="nav-link fw-bold">
+            <a class="nav-link fw-bold" href="{% url 'profile' %}">
               Welcome, {{ user.username }}
-            </span>
+            </a>
           </li>
 
           <li class="nav-item">

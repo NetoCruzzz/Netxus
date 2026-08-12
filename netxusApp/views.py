@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib import messages
 from .models import Movies
 from .forms import PostForm
 
+from django.contrib.auth.decorators import login_required
 
 #home view
 def home(request):
@@ -45,6 +46,25 @@ def login_user(request):
         form = AuthenticationForm()
 
     return render(request, "login.html", {'form': form})
+
+@login_required
+def profile(request):
+    return render(request, "profile.html")
+
+@login_required
+def edit_profile(request):
+
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    
+    else:
+        form = UserChangeForm(instance=request.user)
+    
+    return render(request, 'edit_profile.html', {'form': form})
 
 # Logout
 def logout_user(request):
