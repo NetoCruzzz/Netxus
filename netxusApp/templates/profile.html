@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> {{ user.username }}'s Profile </h1>
+
+<p> Username: {{ user.username }} </p>
+<p> Firt Name: {{ user.first_name }} </p>
+<p> Last Name: {{ user.last_name }} </p>
+<p> Email: {{ user.email }} </p>
+
+<a href="{% url 'edit_profile' %}"> Edit Profile </a>
+
+{% endblock %}

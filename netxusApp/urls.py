@@ -13,4 +13,6 @@ urlpatterns = [
         views.movies,
         name='movies'),
     path("create/", views.create_post, name="create_post"),
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile')
 ]
