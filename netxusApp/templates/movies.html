@@ -5,7 +5,9 @@
         <title>{{movie.title}}</title>
     </head>
     <body>
-        <h1>{{movie.title}}</h1>
+        <img src="{{ movie.poster.url }}" alt="{{ movie.name }}"/>
+        <img src="{{ movie.banner.url }}" alt="{{ movie.name }}"/>
+        <h1>{{movie.title}} {{movie.pRating}} </h1>
 
         <p>{{movie.description}}</p>
         <hr>
