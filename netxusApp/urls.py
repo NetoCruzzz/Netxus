@@ -1,5 +1,7 @@
 from django.urls import path, include
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib.auth import views as auth_views #for account management
 
 urlpatterns = [
@@ -14,3 +16,5 @@ urlpatterns = [
         name='movies'),
     path("create/", views.create_post, name="create_post"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,7 +6,9 @@ from django.db import models
 class Movies(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    release_date = models.IntegerField()
+    pRating = models.CharField(max_length=10)
+    poster = models.ImageField(upload_to='posters/', blank=True, null=True)
+    banner = models.ImageField(upload_to='banners/', blank=True, null=True)
 
 
     def __str__(self):
