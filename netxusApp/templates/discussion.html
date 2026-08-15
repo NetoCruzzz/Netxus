@@ -2,13 +2,13 @@
 {% block content %}
 
     <head>
-        <title>{{movie.title}}</title>
+        <title>{{movie.name}}</title>
     </head>
     <body>
         <img class="poster" src="{{ movie.poster.url }}" alt="{{ movie.name }}"/>
         <img class="banner" src="{{ movie.banner.url }}" alt="{{ movie.name }}"/>
-        <h1>{{movie.title}} {{movie.pRating}} </h1>
-
+        <h1>{{movie.name}} </h1>
+        <h3> {{movie.pRating}}</h3>
         <p>{{movie.description}}</p>
         <hr>
 
