@@ -3,10 +3,15 @@ from django.db import models
 # Create your models here.
 
 #Model for Movies
-class Movies(models.Model):
+class Discussion(models.Model):
     name = models.CharField(max_length=100)
+    id = models.SlugField(unique=True, primary_key=True)
     description = models.TextField()
-    release_date = models.IntegerField()
+    pRating = models.CharField(max_length=10)
+    poster = models.ImageField(upload_to='posters/', blank=True,default='static/poster-default.jpg')
+    banner = models.ImageField(upload_to='banners/', blank=True,default='static/banner-default.jpg')
+    postCount = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
@@ -17,7 +22,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     movie = models.ForeignKey(
-        Movies, 
+        Discussion, 
         on_delete= models.CASCADE,
         related_name= "posts"
     )

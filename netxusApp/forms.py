@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Discussion
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -8,4 +8,16 @@ class PostForm(forms.ModelForm):
             'movie',
             'title',
             'content',
+        ]
+
+class DiscussionForm(forms.ModelForm):
+    class Meta:
+        model = Discussion
+        fields = [
+            'name',
+            'id',
+            'description',
+            'pRating',
+            'poster',
+            'banner',
         ]

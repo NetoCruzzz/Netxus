@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{% block content %}
 
     <head>
         <title>{{movie.title}}</title>
     </head>
     <body>
-        <h1>{{movie.title}}</h1>
+        <img class="poster" src="{{ movie.poster.url }}" alt="{{ movie.name }}"/>
+        <img class="banner" src="{{ movie.banner.url }}" alt="{{ movie.name }}"/>
+        <h1>{{movie.title}} {{movie.pRating}} </h1>
 
         <p>{{movie.description}}</p>
         <hr>
@@ -26,4 +28,4 @@
             
         {% endfor %}
     </body>
-</html>
+{% endblock %}

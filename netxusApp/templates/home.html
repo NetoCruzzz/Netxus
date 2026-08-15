@@ -3,8 +3,28 @@
 
 <h1>Welcome to Netxus!</h1>
 <p>Here you can post and view forums based off of movies!</p>
-<a href="{% url 'create_post' %}">
-    <button>Create a Post</button>
-</a>
+<section>
+    <h1> Trending Discussions </h1>
+    <ul>
+        {% for discussion in trending %}
+            <li>
+                <a href="{% url 'discussion' id=discussion.id %}">{{ discussion.name }}</a>
+                <p>{{ discussion.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section>
+    <h1> Newest Discussions </h1>
+    <ul>
+        {% for discussion in newest %}
+            <li>
+                <a href="{% url 'discussion' id=discussion.id %}">{{ discussion.name }}</a>
+                <p>{{ discussion.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
 
 {% endblock %}
