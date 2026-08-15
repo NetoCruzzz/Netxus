@@ -5,7 +5,7 @@ from django.db import models
 #Model for Movies
 class Movies(models.Model):
     name = models.CharField(max_length=100)
-    id = models.CharField(unique=True, primary_key=True)
+    id = models.SlugField(unique=True, primary_key=True)
     description = models.TextField()
     pRating = models.CharField(max_length=10)
     poster = models.ImageField(upload_to='posters/', blank=True, null=True)

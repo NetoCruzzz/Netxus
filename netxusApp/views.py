@@ -80,3 +80,7 @@ def create_post(request):
                   "create_post.html",
                   {"form": form}
                   )
+
+def discussion_page(request, id):
+    movie = Movies.objects.get(id=id)
+    return render(request, "movies.html", {"movie": movie})
