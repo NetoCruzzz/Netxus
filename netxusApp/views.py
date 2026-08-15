@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib import messages
-from .models import Discussion
-from .forms import PostForm
+from . import models
+from . import forms
 
 
 #home view
@@ -69,18 +68,30 @@ def movies(request, movie_id):
     )
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = forms.PostForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
     else:
-        form = PostForm()
+        form = forms.PostForm()
 
     return render(request,
                   "create_post.html",
                   {"form": form}
                   )
 
+#shows information about a specific discussion and its posts
 def discussion_page(request, id):
-    movie = Discussion.objects.get(id=id)
+    movie = models.Discussion.objects.get(id=id)
     return render(request, "discussion.html", {"movie": movie})
+
+#creating a new discussion
+def new_discussion(request):
+    if request.method == 'POST':
+        form = forms.DiscussionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = forms.DiscussionForm()
+    return render(request, 'create_discussion.html', {'form': form})
