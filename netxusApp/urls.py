@@ -15,7 +15,7 @@ urlpatterns = [
      #   views.movies,
      #   name='movies'),
     path('profile/', views.profile, name='profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile')
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
     path("create/", views.create_post, name="create_post"),
     path("discussion/<slug:id>/", views.discussion_page, name="discussion"),
     path("new_discussion/", views.new_discussion, name="new_discussion"),
