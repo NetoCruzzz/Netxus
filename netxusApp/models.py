@@ -8,8 +8,8 @@ class Discussion(models.Model):
     id = models.SlugField(unique=True, primary_key=True)
     description = models.TextField()
     pRating = models.CharField(max_length=10)
-    poster = models.ImageField(upload_to='posters/', blank=True, null=True)
-    banner = models.ImageField(upload_to='banners/', blank=True, null=True)
+    poster = models.ImageField(upload_to='posters/', blank=True,default='static/poster-default.jpg')
+    banner = models.ImageField(upload_to='banners/', blank=True,default='static/banner-default.jpg')
     postCount = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 

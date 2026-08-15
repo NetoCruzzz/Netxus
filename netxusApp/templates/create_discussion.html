@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+
 <section>
     <h1>New Discussion</h1>
     <form class ="discussion-form" action="{% url 'new_discussion' %}" method="post" enctype="multipart/form-data">
@@ -6,3 +9,5 @@
             <button class="form-submit">Create Discussion</button>
     </form>
 </section>
+
+{% endblock %}
