@@ -11,6 +11,7 @@ class Discussion(models.Model):
     poster = models.ImageField(upload_to='posters/', blank=True, null=True)
     banner = models.ImageField(upload_to='banners/', blank=True, null=True)
     postCount = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):

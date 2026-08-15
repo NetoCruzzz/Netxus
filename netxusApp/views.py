@@ -7,7 +7,9 @@ from . import forms
 
 #home view
 def home(request):
-    return render(request, 'home.html', {})
+    trending = models.Discussion.objects.order_by('-postCount')[:5]  # Get the top 5 discussions based on postCount
+    newest = models.Discussion.objects.order_by('-created_at')[:5]  # Get the 5 most recently created discussions
+    return render(request, 'home.html', {'trending': trending, 'newest': newest})
 
 # Register Info
 def register_user(request):
