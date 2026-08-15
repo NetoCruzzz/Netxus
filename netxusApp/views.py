@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
-from .models import Movies
+from .models import Discussion
 from .forms import PostForm
 
 
@@ -82,5 +82,5 @@ def create_post(request):
                   )
 
 def discussion_page(request, id):
-    movie = Movies.objects.get(id=id)
-    return render(request, "movies.html", {"movie": movie})
+    movie = Discussion.objects.get(id=id)
+    return render(request, "discussion.html", {"movie": movie})

@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 #Model for Movies
-class Movies(models.Model):
+class Discussion(models.Model):
     name = models.CharField(max_length=100)
     id = models.SlugField(unique=True, primary_key=True)
     description = models.TextField()
@@ -20,7 +20,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     movie = models.ForeignKey(
-        Movies, 
+        Discussion, 
         on_delete= models.CASCADE,
         related_name= "posts"
     )
