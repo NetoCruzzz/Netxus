@@ -50,22 +50,6 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-def movies(request, movie_id):
-    movie = get_object_or_404(
-        Movies, 
-        id=movie_id
-    )
-    posts = movie.posts.all().order_by("-created_at")
-
-    return render(
-        request,
-        "posts/movies.html",
-        {
-            "movie": movie,
-            "posts": posts
-        }
-
-    )
 def create_post(request):
     if request.method == 'POST':
         form = forms.PostForm(request.POST)

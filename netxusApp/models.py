@@ -10,6 +10,7 @@ class Discussion(models.Model):
     pRating = models.CharField(max_length=10)
     poster = models.ImageField(upload_to='posters/', blank=True, null=True)
     banner = models.ImageField(upload_to='banners/', blank=True, null=True)
+    postCount = models.IntegerField(default=0)
 
 
     def __str__(self):
