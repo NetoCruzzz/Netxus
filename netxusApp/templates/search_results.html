@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <center>
         {% if searched %}
             <h2>Search Results for "{{ searched }}"</h2>
             <br/>
@@ -13,6 +12,4 @@
         {% else %}
             <h2>No search query provided.</h2>
         {% endif %}
-
-    </center>
 {% endblock %}

@@ -1,10 +1,17 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import tmdbsimple as tmdb
 from . import models
 from . import forms
+
+#loading API key for TMDB API
+path = settings.BASE_DIR / '.api-key.txt'
+with open(path, "r") as file:
+    tmdb.API_KEY = file.read().strip()
 
 #home view
 def home(request):
@@ -93,14 +100,23 @@ def discussion_page(request, id):
 
 #creating a new discussion
 def new_discussion(request):
-    if request.method == 'POST':
-        form = forms.DiscussionForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+    #if movie/show is searched for:
+    #create a search query to TMDB API
+    #
+    if request.method == "POST":
+        movie_results=[]
+        show_results=[]
+        wanted = request.POST['searched_api']
+        search = tmdb.Search()
+        search.movie(query=wanted)
+        for result in search.results:
+            movie_results.append([result['title'], result['id']])
+        search.tv(query=wanted)
+        for result in search.results:
+            show_results.append([result['name'], result['id']])
+        return render(request, "create_discussion.html", {"movie_results": movie_results, "show_results": show_results})
     else:
-        form = forms.DiscussionForm()
-    return render(request, 'create_discussion.html', {'form': form})
+        return render(request, "create_discussion.html", {})
 
 #search results view
 def search_results(request):

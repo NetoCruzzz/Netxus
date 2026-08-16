@@ -220,3 +220,6 @@ __marimo__/
 #media files
 media/posters
 media/banners
+
+#api key file
+.api-key.txt
