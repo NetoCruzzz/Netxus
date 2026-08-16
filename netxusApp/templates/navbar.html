@@ -38,12 +38,16 @@
       </ul>
 
       <!-- Search -->
-      <form class="d-flex me-3" role="search">
+      <form class="d-flex me-3" role="search" method = POST action = "{% url 'search_results' %}">
+        {% csrf_token %}
+
+        
         <input
           class="form-control me-2"
           type="search"
-          placeholder="Search"
-          aria-label="Search">
+          placeholder="Search Discussions"
+          aria-label="Search"
+          name = "searched">
 
         <button class="btn btn-outline-success" type="submit">
           Search

@@ -19,6 +19,7 @@ urlpatterns = [
     path("create/", views.create_post, name="create_post"),
     path("discussion/<slug:id>/", views.discussion_page, name="discussion"),
     path("new_discussion/", views.new_discussion, name="new_discussion"),
+    path("search_results/", views.search_results, name="search_results"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

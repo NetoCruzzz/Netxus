@@ -101,3 +101,14 @@ def new_discussion(request):
     else:
         form = forms.DiscussionForm()
     return render(request, 'create_discussion.html', {'form': form})
+
+#search results view
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        discussions = models.Discussion.objects.filter(name__contains=searched)
+        return render(request, 'search_results.html',
+        {'searched': searched, 'discussions': discussions})
+    else:
+        return render(request, 'search_results.html',
+        {})
