@@ -1,10 +1,48 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<h1>Welcome to Netxus!</h1>
-<p>Here you can post and view forums based off of movies!</p>
-<a href="{% url 'create_post' %}">
-    <button>Create a Post</button>
-</a>
+{# Ernesto Cruz: AI helped me out starting here with the layouts/design of front end #}
+<div class="container mt-4">
+
+    <h1>Welcome to Netxus!</h1>
+
+    <p>Here you can post and view forums based off of movies!</p>
+
+    <hr>
+
+    <h2>Movies</h2>
+
+    {% for movie in movies %}
+
+        <div>
+            {% if movie.poster_path %}
+                <a href="{% url 'movies' movie.id %}">
+                    <img
+                        src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                        alt="{{ movie.name }}"
+                        width="200"
+                    >
+                </a>
+            {% endif %}
+
+            <h3>
+                <a href="{% url 'movies' movie.id %}">
+                    {{ movie.name }}
+                </a>
+            </h3>
+
+            <p>Release Year: {{ movie.release_date }}</p>
+        </div>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No movies have been added yet.</p>
+
+    {% endfor %}
+
+</div>
 
 {% endblock %}

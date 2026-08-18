@@ -8,12 +8,17 @@
 
         <h1>Create Post</h1>
 
+        <h2>Movie: {{ movie.name }}</h2>
+
         <form method ="POST">
+        
             {% csrf_token %}
+        
             {{ form.as_p }}
+        
             <button type="submit"> Post </button>
         </form>
         <br>
-        <a href="{% url 'home' %}">Back to home</a>
+        <a href="{% url 'movies' movie.id %}"> Back to {{ movie.name }} </a>
     </body>
 </html>
