@@ -26,5 +26,7 @@ urlpatterns = [
 
     # Ernesto: Anything relating to User's profile
     path('profile/', views.profile, name='profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile')
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('search/', views.search_movies, name='search_movies'),
+    path('movies/add/<int:tmdb_id>/', views.add_movie, name='add_movie'),
 ]

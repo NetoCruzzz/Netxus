@@ -13,6 +13,26 @@
 
     <h2 class="mb-4">Movies</h2>
 
+    {# Ernesto: Search box #}
+    <form method="GET" action="{% url 'search_movies' %}" class="mb-4">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="query"
+                class="form-control"
+                placeholder="Search for a movie..."
+            >
+
+            <button type="submit" class="btn btn-primary">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
     <div class="row">
 
         {% for movie in movies %}

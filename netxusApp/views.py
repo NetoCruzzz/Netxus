@@ -48,6 +48,72 @@ def home(request):
         }
     )
 
+# Search TMDB for movies
+def search_movies(request):
+
+    query = request.GET.get('query', '').strip()
+
+    results = []
+
+    if query:
+        url = "https://api.themoviedb.org/3/search/movie"
+
+        params = {
+            "api_key": settings.TMDB_API_KEY,
+            "query": query
+        }
+
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+
+            for movie in data.get("results", []):
+                results.append(movie)
+
+    return render(
+        request,
+        "search_movies.html",
+        {
+            "query": query,
+            "results": results
+        }
+    )
+
+def add_movie(request, tmdb_id):
+
+    url = f"https://api.themoviedb.org/3/movie/{tmdb_id}"
+
+    params = {
+        "api_key": settings.TMDB_API_KEY
+    }
+
+    response = requests.get(url, params=params)
+
+    if response.status_code != 200:
+        return redirect('home')
+
+    data = response.json()
+
+    title = data.get("title")
+    overview = data.get("overview")
+    release_date = data.get("release_date", "")
+
+    if release_date:
+        release_year = int(release_date[:4])
+    else:
+        release_year = 0
+
+    Movies.objects.get_or_create(
+        name=title,
+        defaults={
+            "description": overview,
+            "release_date": release_year
+        }
+    )
+
+    return redirect('home')
+
 # Register Info
 # Handles user sign-ups via Django's built-in UserCreationForm
 def register_user(request):

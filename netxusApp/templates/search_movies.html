@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1>Search Movies</h1>
+
+    <form method="GET" action="{% url 'search_movies' %}" class="mb-4">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="query"
+                class="form-control"
+                placeholder="Search for a movie..."
+                value="{{ query }}"
+            >
+
+            <button type="submit" class="btn btn-primary">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
+    {% if query %}
+
+        <h2>Results for "{{ query }}"</h2>
+
+        <div class="row">
+
+            {% for movie in results %}
+
+                <div class="col-md-4 mb-4">
+
+                    <div class="card h-100">
+
+                        {% if movie.poster_path %}
+
+                            <img
+                                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                class="card-img-top"
+                                alt="{{ movie.title }}"
+                            >
+
+                        {% endif %}
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                {{ movie.title }}
+                            </h5>
+
+                            {% if movie.release_date %}
+                                <p class="card-text">
+                                    Release Year: {{ movie.release_date|slice:":4" }}
+                                </p>
+                            {% endif %}
+
+                            <p class="card-text">
+                                {{ movie.overview }}
+                            </p>
+
+                            <a 
+                                href="{% url 'add_movie' movie.id %}"
+                                class="btn btn-primary"
+                            >
+                                Add Movie
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>No movies found.</p>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
