@@ -73,6 +73,12 @@ def login_user(request):
             
             if user is not None:
                 login(request, user)
+                
+                next_page = request.GET.get('next')
+
+                if next_page:
+                    return redirect(next_page)
+
                 return redirect('home')
 
     else:
@@ -120,6 +126,8 @@ def movies(request, movie_id):
         }
 
     )
+
+@login_required
 def create_post(request, movie_id):
 
     movie = get_object_or_404(Movies, id=movie_id)

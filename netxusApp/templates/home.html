@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{# Ernesto Cruz: AI helped me out starting here with the layouts/design of front end #}
+{# Ernesto Cruz: AI helped me out starting here with the layouts/design of front end, specifically for the movie.poster_path #}
 <div class="container mt-4">
 
     <h1>Welcome to Netxus!</h1>
@@ -11,37 +11,58 @@
 
     <hr>
 
-    <h2>Movies</h2>
+    <h2 class="mb-4">Movies</h2>
 
-    {% for movie in movies %}
+    <div class="row">
 
-        <div>
-            {% if movie.poster_path %}
-                <a href="{% url 'movies' movie.id %}">
-                    <img
-                        src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                        alt="{{ movie.name }}"
-                        width="200"
-                    >
-                </a>
-            {% endif %}
+        {% for movie in movies %}
 
-            <h3>
-                <a href="{% url 'movies' movie.id %}">
-                    {{ movie.name }}
-                </a>
-            </h3>
+            <div class="col-md-4 mb-4">
 
-            <p>Release Year: {{ movie.release_date }}</p>
-        </div>
+                <div class="card h-100">
 
-        <hr>
+                    {% if movie.poster_path %}
 
-    {% empty %}
+                        <a href="{% url 'movies' movie.id %}">
+                            <img
+                                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                class="card-img-top"
+                                alt="{{ movie.name }}"
+                            >
+                        </a>
 
-        <p>No movies have been added yet.</p>
+                    {% endif %}
 
-    {% endfor %}
+                    <div class="card-body">
+
+                        <h5 class="card-title">
+                            {{ movie.name }}
+                        </h5>
+
+                        <p class="card-text">
+                            Release Year: {{ movie.release_date }}
+                        </p>
+
+                        <a
+                            href="{% url 'movies' movie.id %}"
+                            class="btn btn-primary"
+                        >
+                            View Movie
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>No movies have been added yet.</p>
+
+        {% endfor %}
+
+    </div>
 
 </div>
 

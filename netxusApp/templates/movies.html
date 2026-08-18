@@ -23,6 +23,10 @@
 
             <p>{{post.content}}</p>
 
+            <p>
+                Posted by: <strong>{{ post.user.username }}</strong>
+            </p>
+
             <small>{{post.created_at}}</small>
         {%empty%}
 
