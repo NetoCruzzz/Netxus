@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 class Movies(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    release_date = models.IntegerField()
+    release_date = models.IntegerField()    # Ernesto: Stores the release Year of the movies
 
-
+    # Ernesto: String representation so movies names show up clearly in the admin/shell
     def __str__(self):
         return self.name
 
@@ -18,12 +18,15 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
 
+    # Ernesto: Foreign key linking post to movies; if movie ideleted, delte its posts too
+    #          related_name="posts" allows querying movie.posts.all() in views/templates
     movie = models.ForeignKey(
         Movies, 
         on_delete= models.CASCADE,
         related_name= "posts"
     )
 
+    # Ernesto: Added Foreign key linking post to author; CASCADE deletes posts if user acc is removed
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -31,8 +34,11 @@ class Post(models.Model):
         blank=True
     )
 
+    # Automatically records creation timestamp on initial save
     created_at = models.DateTimeField(auto_now_add=True)
+    # Automatically updates timestamp whenever the post is edited
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Ernesto: Display POST title in Django admin
     def __str__(self):
         return self.title
