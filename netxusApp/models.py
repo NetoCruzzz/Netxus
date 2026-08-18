@@ -4,10 +4,16 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 #Model for Movies
-class Movies(models.Model):
+class Discussion(models.Model):
     name = models.CharField(max_length=100)
+    id = models.SlugField(unique=True, primary_key=True)
     description = models.TextField()
-    release_date = models.IntegerField()    # Ernesto: Stores the release Year of the movies
+    pRating = models.CharField(max_length=10)
+    poster = models.ImageField(upload_to='posters/', blank=True,default='static/poster-default.jpg')
+    banner = models.ImageField(upload_to='banners/', blank=True,default='static/banner-default.jpg')
+    postCount = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
     # Ernesto: String representation so movies names show up clearly in the admin/shell
     def __str__(self):
@@ -21,7 +27,7 @@ class Post(models.Model):
     # Ernesto: Foreign key linking post to movies; if movie ideleted, delte its posts too
     #          related_name="posts" allows querying movie.posts.all() in views/templates
     movie = models.ForeignKey(
-        Movies, 
+        Discussion,
         on_delete= models.CASCADE,
         related_name= "posts"
     )

@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#media files
+media/posters
+media/banners
+
+#api key file
+.api-key.txt

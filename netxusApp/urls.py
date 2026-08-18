@@ -1,5 +1,7 @@
 from django.urls import path, include
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib.auth import views as auth_views #for account management
 
 urlpatterns = [
@@ -12,12 +14,15 @@ urlpatterns = [
     path(
         'movies/<int:movie_id>/',
         views.movies,
-        name='movies'),
+        name='movies'
+    ),
 
     # Ernesto: Captures movie_id so the new post attaches to the correct movie
-    path('movies/<int:movie_id>/create/', 
-    views.create_post, 
-    name="create_post"),
+    path(
+        'movies/<int:movie_id>/create/',
+        views.create_post,
+        name='create_post'
+    ),
 
     # Ernesto: Gets post_id to edit or delete a secific post
     path('posts/<int:post_id>/edit/', views.edit_post, name='edit_post'),
@@ -29,4 +34,11 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('search/', views.search_movies, name='search_movies'),
     path('movies/add/<int:tmdb_id>/', views.add_movie, name='add_movie'),
+
+    # Discussion & search routes
+    path("discussion/<slug:id>/", views.discussion_page, name="discussion"),
+    path("new_discussion/", views.new_discussion, name="new_discussion"),
+    path("search_results/", views.search_results, name="search_results"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

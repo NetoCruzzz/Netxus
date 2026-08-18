@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section>
+    <h1>Create a New Discussion</h1>
+    <!-- Search Bar-->
+      <form class="d-flex me-3" role="search" method=POST action="{% url 'new_discussion' %}">
+        {% csrf_token %}
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search For Movies or Shows"
+          aria-label="Search"
+          name = "searched_api">
+
+        <button class="btn btn-outline-success" type="submit">
+          Search
+        </button>
+      </form>
+</section>
+<section>
+    <!--Results from api-->
+    {% if movie_results or show_results %}
+        <h2>Choose Your Movie or Show</h2>
+        <h6>Movies</h6>
+        {% for result in movie_results %}
+            <p>{{ result.0 }} (ID: {{ result.1 }})</p>
+        {% endfor %}
+        <h6>Shows</h6>
+        {% for result in show_results %}
+            <p>{{ result.0 }} (ID: {{ result.1 }})</p>
+        {% endfor %}
+
+    {% endif %}
+</section>
+
+{% endblock %}

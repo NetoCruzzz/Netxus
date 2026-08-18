@@ -43,9 +43,9 @@
 
                     {% if movie.poster_path %}
 
-                        <a href="{% url 'movies' movie.id %}">
+                        <a href="{% url 'discussion' id=movie.id %}">
                             <img
-                                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                src="{{ movie.poster.url }}"
                                 class="card-img-top"
                                 alt="{{ movie.name }}"
                             >
@@ -59,12 +59,8 @@
                             {{ movie.name }}
                         </h5>
 
-                        <p class="card-text">
-                            Release Year: {{ movie.release_date }}
-                        </p>
-
                         <a
-                            href="{% url 'movies' movie.id %}"
+                            href="{% url 'discussion' id=movie.id %}"
                             class="btn btn-primary"
                         >
                             View Movie
@@ -85,5 +81,28 @@
     </div>
 
 </div>
+<section>
+    <h1> Trending Discussions </h1>
+    <ul>
+        {% for discussion in trending %}
+            <li>
+                <a href="{% url 'discussion' id=discussion.id %}">{{ discussion.name }}</a>
+                <p>{{ discussion.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section>
+    <h1> Newest Discussions </h1>
+    <ul>
+        {% for discussion in newest %}
+            <li>
+                <a href="{% url 'discussion' id=discussion.id %}">{{ discussion.name }}</a>
+                <p>{{ discussion.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
 
 {% endblock %}

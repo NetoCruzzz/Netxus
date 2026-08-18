@@ -1,52 +1,36 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
 import requests
+import tmdbsimple as tmdb
 
-from .models import Movies, Post    # Ernesto: Added Post import to avoid NameError in edit_post
+from .models import Discussion, Post    # Ernesto: Added Post import to avoid NameError in edit_post
 from .forms import PostForm
+from . import models
+from . import forms
 
+#loading API key for TMDB API
+tmdb.API_KEY = settings.TMDB_API_KEY
 
 # Home View
 # Ernesto: Added TMDB API to fetch poster images
 def home(request):
-    movies = Movies.objects.all()
-
-    # Ernesto: Loop through each movie in our DB to fetch matching poster path from TMDB
-    for movie in movies:
-        url = "https://api.themoviedb.org/3/search/movie"
-
-        params = {
-            "api_key": settings.TMDB_API_KEY,
-            "query": movie.name
-        }
-
-        response = requests.get(url, params=params)
-
-        # Ernesto: Check if TMDB request succeeded and got results
-        if response.status_code == 200:
-            data = response.json()
-
-            # Ernesto: Grab the first search result's poster path if available
-            if data["results"]:
-                movie.poster_path = data["results"][0]["poster_path"]
-                print(movie.name, movie.poster_path)
-            else:
-                movie.poster_path = None
-        else:
-            movie.poster_path = None
+    trending = models.Discussion.objects.order_by('-postCount')[:5]  # Get the top 5 discussions based on postCount
+    newest = models.Discussion.objects.order_by('-created_at')[:5]  # Get the 5 most recently created discussions
 
     return render(
         request,
         'home.html',
         {
-            'movies' : movies
+            'trending': trending,
+            'newest': newest
         }
     )
+
 
 # Search TMDB for movies
 def search_movies(request):
@@ -80,6 +64,7 @@ def search_movies(request):
         }
     )
 
+
 def add_movie(request, tmdb_id):
 
     url = f"https://api.themoviedb.org/3/movie/{tmdb_id}"
@@ -104,15 +89,22 @@ def add_movie(request, tmdb_id):
     else:
         release_year = 0
 
-    Movies.objects.get_or_create(
-        name=title,
-        defaults={
-            "description": overview,
-            "release_date": release_year
-        }
-    )
+    # Ulyses: Discussion replaced the old Movies model.
+    # Ernesto: Keeping the TMDB movie search/add functionality while using the new Discussion model.
+    if title:
+        discussion_id = title.lower().replace(" ", "-")
+
+        Discussion.objects.get_or_create(
+            id=discussion_id,
+            defaults={
+                "name": title,
+                "description": overview or "",
+                "pRating": data.get("vote_average", "")
+            }
+        )
 
     return redirect('home')
+
 
 # Register Info
 # Handles user sign-ups via Django's built-in UserCreationForm
@@ -129,6 +121,7 @@ def register_user(request):
 
     return render(request, 'register.html', {'form': form})
 
+
 # Login Info
 def login_user(request):
     if request.method == 'POST':
@@ -140,13 +133,13 @@ def login_user(request):
 
             # Credentials check against DB
             user = authenticate(
-                username=username, 
+                username=username,
                 password=password
                 )
-            
+
             if user is not None:
                 login(request, user)
-                
+
                 # Ernesto: If redirected here by @login_required, send them back to where they were going
                 #         Example - If someone is logged in and tries to create a post then they will be sent to login page, after logging in they will be back to their original post
                 next_page = request.GET.get('next')
@@ -161,10 +154,12 @@ def login_user(request):
 
     return render(request, "login.html", {'form': form})
 
+
 # Ernesto: Profile protection so other users only access their own profile
 @login_required
 def profile(request):
     return render(request, "profile.html")
+
 
 # Ernesto: Added user's to edit their profile
 @login_required
@@ -176,29 +171,31 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             return redirect('profile')
-    
+
     else:
         form = UserChangeForm(instance=request.user)
-    
+
     return render(request, 'edit_profile.html', {'form': form})
+
 
 # Logout
 def logout_user(request):
     logout(request)
     return redirect('home')
 
+
 # Movie details
 def movies(request, movie_id):
     # Gets movie by ID or 404 if not found
     movie = get_object_or_404(
-        Movies, 
+        Discussion,
         id=movie_id
     )
     posts = movie.posts.all().order_by("-created_at")
 
     return render(
         request,
-        "movies.html",
+        "discussion.html",
         {
             "movie": movie,
             "posts": posts
@@ -206,11 +203,12 @@ def movies(request, movie_id):
 
     )
 
+
 # Create Post
 @login_required
 def create_post(request, movie_id):
 
-    movie = get_object_or_404(Movies, id=movie_id)
+    movie = get_object_or_404(Discussion, id=movie_id)
 
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -236,6 +234,7 @@ def create_post(request, movie_id):
         }
     )
 
+
 # Ernesto: Added Edit Post
 @login_required
 def edit_post(request, post_id):
@@ -246,7 +245,7 @@ def edit_post(request, post_id):
     # post.user != request.user will basically be like post.user == request.user then they can edit, but if someone else owns it then they can't edit it
     if post.user != request.user:
         return redirect('movies', movie_id=post.movie.id)
-    
+
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
 
@@ -255,7 +254,7 @@ def edit_post(request, post_id):
             return redirect('movies', movie_id=post.movie.id)
     else:
         form = PostForm(instance=post)
-    
+
     return render(
         request,
         "edit_post.html",
@@ -265,6 +264,7 @@ def edit_post(request, post_id):
         }
     )
 
+
 @login_required
 def delete_post(request, post_id):
 
@@ -272,13 +272,13 @@ def delete_post(request, post_id):
 
     if post.user != request.user:
         return redirect('movies', movie_id=post.movie.id)       # Ernesto: Supposed to prevent someone else delete a post that's not theirs
-    
-    if request.method == 'POST':                                
+
+    if request.method == 'POST':
         movie_id = post.movie.id
         post.delete()                                           # Ernesto: Only delete post when user submits a POST request
 
         return redirect('movies', movie_id=movie_id)
-    
+
     return render(
         request,
         "delete_post.html",
@@ -286,3 +286,51 @@ def delete_post(request, post_id):
             "post": post
         }
     )
+
+
+#shows information about a specific discussion and its posts
+def discussion_page(request, id):
+    movie = models.Discussion.objects.get(id=id)
+    posts = movie.posts.all().order_by("-created_at")
+
+    return render(
+        request,
+        "discussion.html",
+        {
+            "movie": movie,
+            "posts": posts
+        }
+    )
+
+
+#creating a new discussion
+def new_discussion(request):
+    #if movie/show is searched for:
+    #create a search query to TMDB API
+    #
+    if request.method == "POST":
+        movie_results=[]
+        show_results=[]
+        wanted = request.POST['searched_api']
+        search = tmdb.Search()
+        search.movie(query=wanted)
+        for result in search.results:
+            movie_results.append([result['title'], result['id']])
+        search.tv(query=wanted)
+        for result in search.results:
+            show_results.append([result['name'], result['id']])
+        return render(request, "create_discussion.html", {"movie_results": movie_results, "show_results": show_results})
+    else:
+        return render(request, "create_discussion.html", {})
+
+
+#search results view
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        discussions = models.Discussion.objects.filter(name__contains=searched)
+        return render(request, 'search_results.html',
+        {'searched': searched, 'discussions': discussions})
+    else:
+        return render(request, 'search_results.html',
+        {})
