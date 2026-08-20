@@ -52,7 +52,7 @@ def search_movies(request):
     })
 
 
-# Add a movie from TMDB to the database
+#Neto: Add a movie from TMDB to the database
 def add_movie(request, tmdb_id):
 
     url = f"https://api.themoviedb.org/3/movie/{tmdb_id}"
@@ -94,7 +94,34 @@ def add_movie(request, tmdb_id):
             }
         )
 
-    return redirect('home')
+    return redirect('discussion', id=tmdb_id)
+
+#Ulyses: Add a show from TMDB to the database
+def add_show(request, tmdb_id):
+
+    show = tmdb.TV(tmdb_id)
+    show_info = show.info()
+    name = show_info.get("name")
+    descripton = show_info.get("overview", "")
+    poster_path = show_info.get("poster_path")
+    backdrop_path = show_info.get("backdrop_path") 
+    rating = show_info.get("vote_average", "")
+
+    poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else ""
+    banner_url = f"https://image.tmdb.org/t/p/w1280{backdrop_path}" if backdrop_path else ""
+
+    Discussion.objects.get_or_create(
+        id=str(tmdb_id),
+        defaults={
+            "name": name,
+            "description": descripton,
+            "pRating": rating,
+            "poster": poster_url,
+            "banner": banner_url
+        }
+    )
+
+    return redirect('discussion', id=tmdb_id)
 
 
 # Register
@@ -181,22 +208,6 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-
-# Show a movie discussion and its posts
-def movies(request, movie_id):
-
-    movie = get_object_or_404(
-        Discussion,
-        id=movie_id
-    )
-
-    posts = movie.posts.all().order_by("-created_at")
-
-    return render(request, "discussion.html", {
-        "movie": movie,
-        "posts": posts
-    })
-
 # Shows a discussion and its posts
 def discussion_page(request, id):
     movie = get_object_or_404(Discussion, id=id)
@@ -229,7 +240,7 @@ def create_post(request, movie_id):
             movie.postCount += 1
             movie.save()
 
-            return redirect('movies', movie_id=movie.id)
+            return redirect('discussion', id=movie.id)
 
     else:
         form = PostForm()
@@ -248,7 +259,7 @@ def edit_post(request, post_id):
 
     # Only the person who made the post can edit it
     if post.user != request.user:
-        return redirect('movies', movie_id=post.movie.id)
+        return redirect('discussion', id=post.movie.id)
 
     if request.method == 'POST':
         form = PostForm(
@@ -258,7 +269,7 @@ def edit_post(request, post_id):
 
         if form.is_valid():
             form.save()
-            return redirect('movies', movie_id=post.movie.id)
+            return redirect('discussion', id=post.movie.id)
 
     else:
         form = PostForm(instance=post)
@@ -277,7 +288,7 @@ def delete_post(request, post_id):
 
     # Only the person who made the post can delete it
     if post.user != request.user:
-        return redirect('movies', movie_id=post.movie.id)
+        return redirect('discussion', id=post.movie.id)
 
     if request.method == 'POST':
         movie_id = post.movie.id
@@ -285,7 +296,7 @@ def delete_post(request, post_id):
         post.movie.save()
         post.delete()
 
-        return redirect('movies', movie_id=movie_id)
+        return redirect('discussion', id=movie_id)
 
     return render(request, "delete_post.html", {
         "post": post
@@ -310,7 +321,10 @@ def new_discussion(request):
             movie_results.append([
                 result['title'],
                 result['id'],
-                result.get('poster_path')
+                result['poster_path'],
+                result['overview'],
+                result['release_date'],
+                "movie",
             ])
 
         # Search for TV shows
@@ -320,12 +334,16 @@ def new_discussion(request):
             show_results.append([
                 result['name'],
                 result['id'],
-                result.get('poster_path')
+                result['poster_path'],
+                result['overview'],
+                result['first_air_date'],
+                "show",
             ])
 
         return render(request, "create_discussion.html", {
             "movie_results": movie_results,
-            "show_results": show_results
+            "show_results": show_results,
+            "searched_api": wanted
         })
 
     return render(request, "create_discussion.html")
