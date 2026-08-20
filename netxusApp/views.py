@@ -12,6 +12,9 @@ from .forms import PostForm
 
 
 # TMDB API key
+# Ernesto: Everything online says NOT to share your API key so create ".env" file in "netxus/App"
+#          Create an account in tmdb website, you should get it for free as long as is for personal user, which it is in this case
+#          and put 'TMDB_API_KEY= ....' put you API key after '=' then it should work, make sure you don't push your .env with you API key
 tmdb.API_KEY = settings.TMDB_API_KEY
 
 
@@ -83,14 +86,15 @@ def add_movie(request, tmdb_id):
         if backdrop:
             banner_url = f"https://image.tmdb.org/t/p/w1280{backdrop}"
 
+        # Ernesto: Adds the movie to the database and avoids duplicates by using the movies' ID instead of title
         Discussion.objects.get_or_create(
-            id=str(tmdb_id),
+            id=str(tmdb_id),                                                                # Ernesto: This line of code will make or break the posters/banners
             defaults={
                 "name": title,
                 "description": data.get("overview", ""),
                 "pRating": data.get("vote_average", ""),
-                "poster": poster_url,
-                "banner": banner_url
+                "poster": poster_url,                                                       # Ernesto: Saves the TMDB poster link instead of downloading the image
+                "banner": banner_url                                                        # Ernesto: Saves the TMDB banner link instead of downloading image
             }
         )
 
@@ -125,6 +129,7 @@ def add_show(request, tmdb_id):
 
 
 # Register
+# Ernesto: Handled the User Registration
 def register_user(request):
 
     if request.method == 'POST':
@@ -143,6 +148,7 @@ def register_user(request):
 
 
 # Login
+# Ernesto: Handled the User login 
 def login_user(request):
 
     if request.method == 'POST':
@@ -160,6 +166,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
 
+                # Ernesto: ADDED so the user is sent back to the page they wanted before logging in
                 next_page = request.GET.get('next')
 
                 if next_page:
@@ -176,12 +183,14 @@ def login_user(request):
 
 
 # Profile
+# Ernesto: Handled the user' profile
 @login_required
 def profile(request):
     return render(request, "profile.html")
 
 
 # Edit profile
+# Ernesto: ADDED so the user can edit their profile (Still needs some tweaks)
 @login_required
 def edit_profile(request):
 
@@ -204,14 +213,15 @@ def edit_profile(request):
 
 
 # Logout
+# Ernesto: Handled User Logout
 def logout_user(request):
     logout(request)
-    return redirect('home')
+    return redirect('home')                                                             # Ernesto: Sends user back to home page after logging out
 
 # Shows a discussion and its posts
 def discussion_page(request, id):
     movie = get_object_or_404(Discussion, id=id)
-    posts = movie.posts.all().order_by("-created_at")
+    posts = movie.posts.all().order_by("-created_at") #orders posts by newest first
 
     return render(request, "discussion.html", {
         "movie": movie,
@@ -234,6 +244,8 @@ def create_post(request, movie_id):
             post = form.save(commit=False)
 
             post.movie = movie
+
+            # Ernesto: ADDED so it saves the logged-in user as the author of the post
             post.user = request.user
 
             post.save()
@@ -257,7 +269,7 @@ def edit_post(request, post_id):
 
     post = get_object_or_404(Post, id=post_id)
 
-    # Only the person who made the post can edit it
+    # Ernesto: ADDED so only the person who made the post can edit it
     if post.user != request.user:
         return redirect('discussion', id=post.movie.id)
 
@@ -286,7 +298,7 @@ def delete_post(request, post_id):
 
     post = get_object_or_404(Post, id=post_id)
 
-    # Only the person who made the post can delete it
+    # Ernesto: Only the person who made the post can delete it
     if post.user != request.user:
         return redirect('discussion', id=post.movie.id)
 
@@ -314,6 +326,7 @@ def new_discussion(request):
         wanted = request.POST.get('searched_api', '')
 
         # Search for movies
+        # Ernesto: UPDATED Searches TMDB for movies using the search bar (tmdb syntax)
         search = tmdb.Search()
         search.movie(query=wanted)
 
