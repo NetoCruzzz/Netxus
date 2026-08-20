@@ -226,6 +226,8 @@ def create_post(request, movie_id):
             post.user = request.user
 
             post.save()
+            movie.postCount += 1
+            movie.save()
 
             return redirect('movies', movie_id=movie.id)
 
@@ -279,7 +281,8 @@ def delete_post(request, post_id):
 
     if request.method == 'POST':
         movie_id = post.movie.id
-
+        post.movie.postCount -= 1
+        post.movie.save()
         post.delete()
 
         return redirect('movies', movie_id=movie_id)
@@ -343,5 +346,8 @@ def search_results(request):
             'searched': searched,
             'discussions': discussions
         })
-
-    return render(request, 'search_results.html')
+    else:
+        discussions = Discussion.objects.all()
+        return render(request, 'search_results.html', {
+            'discussions': discussions
+        })
