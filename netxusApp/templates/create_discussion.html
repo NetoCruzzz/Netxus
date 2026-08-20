@@ -15,7 +15,7 @@
             <h1>Create a Discussion</h1>
 
             <p class="text-secondary">
-                Search for a movie or TV show to start a community discussion.
+                Search for a Movie or TV show to start a community discussion.
             </p>
 
         </div>
@@ -60,7 +60,6 @@
         <!-- MOVIES -->
 
         {% if movie_results %}
-
             <section class="section pt-3">
 
                 <div class="section-header">
@@ -74,42 +73,86 @@
                         <div class="section-line"></div>
 
                     </div>
-
+                    <span class="text-secondary">
+                        Movie Results for "{{ searched_api }}"
+                    </span>
                 </div>
 
 
                 <div class="row g-4">
 
-                    {% for result in movie_results %}
+                    {% for movie in movie_results %}
 
                         <div class="col-6 col-md-4 col-lg-3">
 
                             <div class="movie-card">
 
-                                {% if result.2 %}
+                                {% if movie.2 %}
 
                                     <img
-                                        src="https://image.tmdb.org/t/p/w500{{ result.2 }}"
+                                        src="https://image.tmdb.org/t/p/w500{{ movie.2 }}"
                                         class="movie-poster"
-                                        alt="{{ result.0 }}"
+                                        alt="{{ movie.2 }}"
                                     >
 
+                                {% else %}
+
+                                    <div
+                                        class="movie-poster d-flex align-items-center justify-content-center"
+                                        style="background:#202028;"
+                                    >
+                                        <span class="text-secondary">
+                                            No Poster
+                                        </span>
+                                    </div>
+
                                 {% endif %}
+
 
                                 <div class="movie-card-body">
 
                                     <h5 class="movie-title">
-                                        {{ result.0 }}
+                                        {{ movie.0 }}
                                     </h5>
 
+
+                                    {% if movie.4 %}
+
+                                        <p class="text-secondary mb-2">
+                                            {{ movie.4|slice:":4" }}
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <p class="movie-description">
+                                        {{ movie.3 }}
+                                    </p>
+
                                     <a
-                                        href="{% url 'add_movie' result.1 %}"
-                                        class="btn btn-netxus w-100 mt-3"
+                                        href="{% url 'add_movie' movie.1 %}"
+                                        class="btn btn-netxus w-100 mt-2"
                                     >
-                                        Add Movie
+                                        Add to Netxus
                                     </a>
 
                                 </div>
+
+                            </div>
+
+                        </div>
+
+                    {% empty %}
+
+                        <div class="col-12">
+
+                            <div class="post-card text-center py-5">
+
+                                <h3>No movies found</h3>
+
+                                <p class="text-secondary">
+                                    Try searching for another movie.
+                                </p>
 
                             </div>
 
@@ -127,49 +170,101 @@
         <!-- SHOWS -->
 
         {% if show_results %}
-
-            <section class="section">
+            <section class="section pt-3">
 
                 <div class="section-header">
 
                     <div>
 
                         <h2 class="section-title">
-                            TV Shows
+                            TV-Shows
                         </h2>
 
-                        <div class="section-line"></div>
+                    <div class="section-line"></div>
 
                     </div>
+
+                    <span class="text-secondary">
+                        TV-Show Results for "{{ searched_api }}"
+                    </span>
 
                 </div>
 
 
                 <div class="row g-4">
 
-                    {% for result in show_results %}
+                    {% for movie in show_results %}
 
                         <div class="col-6 col-md-4 col-lg-3">
 
                             <div class="movie-card">
 
-                                {% if result.2 %}
+                                {% if movie.2 %}
 
                                     <img
-                                        src="https://image.tmdb.org/t/p/w500{{ result.2 }}"
+                                        src="https://image.tmdb.org/t/p/w500{{ movie.2 }}"
                                         class="movie-poster"
-                                        alt="{{ result.0 }}"
+                                        alt="{{ movie.0 }}"
                                     >
 
+                                {% else %}
+
+                                    <div
+                                        class="movie-poster d-flex align-items-center justify-content-center"
+                                        style="background:#202028;"
+                                    >
+                                        <span class="text-secondary">
+                                            No Poster
+                                        </span>
+                                    </div>
+
                                 {% endif %}
+
 
                                 <div class="movie-card-body">
 
                                     <h5 class="movie-title">
-                                        {{ result.0 }}
+                                        {{ movie.0 }}
                                     </h5>
 
+
+                                    {% if movie.4 %}
+
+                                        <p class="text-secondary mb-2">
+                                            {{ movie.4|slice:":4" }}
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <p class="movie-description">
+                                        {{ movie.3 }}
+                                    </p>
+
+                                    <a
+                                        href="{% url 'add_show' movie.1 %}"
+                                        class="btn btn-netxus w-100 mt-2"
+                                    >
+                                        Add to Netxus
+                                    </a>
+
                                 </div>
+
+                            </div>
+
+                        </div>
+
+                    {% empty %}
+
+                        <div class="col-12">
+
+                            <div class="post-card text-center py-5">
+
+                                <h3>No movies found</h3>
+
+                                <p class="text-secondary">
+                                    Try searching for another movie.
+                                </p>
 
                             </div>
 

@@ -25,10 +25,10 @@
         <div class="mt-4">
 
             <a
-                href="{% url 'search_movies' %}"
+                href="{% url 'search_results' %}"
                 class="btn btn-netxus me-2"
             >
-                Explore Movies
+                Explore
             </a>
 
             <a
@@ -43,47 +43,6 @@
     </div>
 
 </section>
-
-
-<!-- SEARCH -->
-
-<section class="container section">
-
-    <div class="search-box">
-
-        <form
-            method="GET"
-            action="{% url 'search_movies' %}"
-        >
-
-            <label class="mb-2">
-                Find a movie
-            </label>
-
-            <div class="input-group">
-
-                <input
-                    type="text"
-                    name="query"
-                    class="form-control"
-                    placeholder="Search for a movie..."
-                >
-
-                <button
-                    type="submit"
-                    class="btn btn-netxus"
-                >
-                    Search
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</section>
-
 
 <!-- TRENDING -->
 

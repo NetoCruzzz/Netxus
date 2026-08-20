@@ -10,13 +10,6 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
 
-    # Ernesto: Passes movie_id to load specific movie forum
-    path(
-        'movies/<int:movie_id>/',
-        views.movies,
-        name='movies'
-    ),
-
     # Ernesto: Captures movie_id so the new post attaches to the correct movie
     path(
         'movies/<int:movie_id>/create/',
@@ -33,12 +26,13 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('search/', views.search_movies, name='search_movies'),
-    path('movies/add/<int:tmdb_id>/', views.add_movie, name='add_movie'),
 
     # Discussion & search routes
     path("discussion/<str:id>/", views.discussion_page, name="discussion"),
     path("new_discussion/", views.new_discussion, name="new_discussion"),
     path("search_results/", views.search_results, name="search_results"),
+    path('movie/add/<int:tmdb_id>/', views.add_movie, name='add_movie'),
+    path("show/add/<int:tmdb_id>/", views.add_show, name="add_show"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
