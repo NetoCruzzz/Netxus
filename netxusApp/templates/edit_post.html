@@ -2,29 +2,56 @@
 
 {% block content %}
 
-<!-- Ernesto: Pasted structure from create_post then AI helped me edit for HTTP -->
-<div class="container mt-4">
+<div class="container">
 
-    <h1> Edit Post </h1>
+    <div class="row justify-content-center">
 
-    <form method="POST">
+        <div class="col-lg-7">
 
-        {% csrf_token %}
-        
-        {{ form.as_p }}
+            <div class="section">
 
-        <button type="submit" class="btn btn-primary"> 
-            Save Changes 
-        </button>
+                <div class="profile-card">
 
-        <a 
-            href="{% url 'movies' post.movie.id %}" 
-            class="btn btn-secondary"
-        > 
-            Cancel 
-        </a>
-    
-    </form>
+                    <h1>Edit Profile</h1>
+
+                    <p class="text-secondary mb-4">
+                        Update your account information.
+                    </p>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <div class="mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-netxus"
+                            >
+                                Save Changes
+                            </button>
+
+                            <a
+                                href="{% url 'profile' %}"
+                                class="btn btn-outline-light ms-2"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 {% endblock %}

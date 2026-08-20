@@ -1,24 +1,68 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 
-<html>
-    <head>
-        <title>Create Post</title>
-    </head>
-    <body>
+{% block content %}
 
-        <h1>Create Post</h1>
+<div class="container">
 
-        <h2>Movie: {{ movie.name }}</h2>
+    <div class="row justify-content-center">
 
-        <form method ="POST">
-        
-            {% csrf_token %}
-        
-            {{ form.as_p }}
-        
-            <button type="submit"> Post </button>
-        </form>
-        <br>
-        <a href="{% url 'movies' movie.id %}"> Back to {{ movie.name }} </a>
-    </body>
-</html>
+        <div class="col-lg-8">
+
+            <div class="section">
+
+                <div class="mb-4">
+
+                    <p class="text-danger fw-bold text-uppercase">
+                        New Discussion
+                    </p>
+
+                    <h1>
+                        Talk about {{ movie.name }}
+                    </h1>
+
+                    <p class="text-secondary">
+                        Share your thoughts with the Netxus community.
+                    </p>
+
+                </div>
+
+
+                <div class="post-card">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <div class="mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-netxus"
+                            >
+                                Publish Post
+                            </button>
+
+                            <a
+                                href="{% url 'movies' movie.id %}"
+                                class="btn btn-outline-light ms-2"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

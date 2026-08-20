@@ -2,13 +2,103 @@
 
 {% block content %}
 
-<h1> {{ user.username }}'s Profile </h1>
+<div class="container">
 
-<p> Username: {{ user.username }} </p>
-<p> Firt Name: {{ user.first_name }} </p>
-<p> Last Name: {{ user.last_name }} </p>
-<p> Email: {{ user.email }} </p>
+    <div class="profile-card">
 
-<a href="{% url 'edit_profile' %}"> Edit Profile </a>
+        <div class="profile-avatar">
+            {{ user.username|first|upper }}
+        </div>
+
+        <h1>{{ user.username }}</h1>
+
+        <p class="text-secondary">
+            Netxus member
+        </p>
+
+
+        <div class="mt-4">
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Username
+                </div>
+
+                <div class="profile-value">
+                    {{ user.username }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    First Name
+                </div>
+
+                <div class="profile-value">
+                    {{ user.first_name|default:"Not provided" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Last Name
+                </div>
+
+                <div class="profile-value">
+                    {{ user.last_name|default:"Not provided" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Email
+                </div>
+
+                <div class="profile-value">
+                    {{ user.email|default:"Not provided" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Member Since
+                </div>
+
+                <div class="profile-value">
+                    {{ user.date_joined|date:"F d, Y" }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mt-4">
+
+            <a
+                href="{% url 'edit_profile' %}"
+                class="btn btn-netxus"
+            >
+                Edit Profile
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

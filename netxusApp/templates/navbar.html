@@ -1,94 +1,107 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg netxus-navbar">
+    <div class="container">
 
-    <!-- Netxus logo / home -->
-    <a class="navbar-brand" href="/">Netxus</a>
+        <a class="navbar-brand netxus-logo" href="{% url 'home' %}">
+            NET<span>XUS</span>
+        </a>
 
-    <!-- Mobile menu button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-      <!-- Main navigation -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-        <li class="nav-item">
-          <a class="nav-link active" href="/">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Posts</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Events</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/new_discussion">Create Discussion</a>
-        </li>
-
-      </ul>
-
-      <!-- Search -->
-      <form class="d-flex me-3" role="search" method = POST action = "{% url 'search_results' %}">
-        {% csrf_token %}
-
-        
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search Discussions"
-          aria-label="Search"
-          name = "searched">
-
-        <button class="btn btn-outline-success" type="submit">
-          Search
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+        >
+            <span class="navbar-toggler-icon"></span>
         </button>
-      </form>
 
-      <!-- Account section -->
-      <ul class="navbar-nav mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse" id="navbarContent">
 
-        {% if user.is_authenticated %}
+            <ul class="navbar-nav me-auto">
 
-          <li class="nav-item">
-            <a class="nav-link fw-bold" href="{% url 'profile' %}">
-              Welcome, {{ user.username }}
-            </a>
-          </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
 
-          <li class="nav-item">
-            <a class="nav-link text-danger" href="{% url 'logout' %}">
-              Logout
-            </a>
-          </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new_discussion' %}">
+                        Create Discussion
+                    </a>
+                </li>
 
-        {% else %}
+            </ul>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">
-              Login
-            </a>
-          </li>
+            <!-- Search -->
+            <form
+                class="d-flex me-lg-3 mb-3 mb-lg-0"
+                method="POST"
+                action="{% url 'search_results' %}"
+            >
 
-          <li class="nav-item">
-            <a class="btn btn-outline-primary ms-2" href="{% url 'register' %}">
-              Register
-            </a>
-          </li>
+                {% csrf_token %}
 
-        {% endif %}
+                <input
+                    class="form-control netxus-search me-2"
+                    type="search"
+                    name="searched"
+                    placeholder="Search discussions..."
+                >
 
-      </ul>
+                <button class="btn btn-outline-netxus">
+                    Search
+                </button>
 
+            </form>
+
+            <!-- Account -->
+
+            <ul class="navbar-nav">
+
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="{% url 'profile' %}"
+                        >
+                            {{ user.username }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link text-danger"
+                            href="{% url 'logout' %}"
+                        >
+                            Logout
+                        </a>
+                    </li>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="{% url 'login' %}"
+                        >
+                            Login
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="btn btn-netxus ms-lg-2"
+                            href="{% url 'register' %}"
+                        >
+                            Register
+                        </a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
     </div>
-  </div>
 </nav>

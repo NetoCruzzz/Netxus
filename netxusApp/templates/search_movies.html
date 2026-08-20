@@ -2,88 +2,155 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container">
 
-    <h1>Search Movies</h1>
+    <section class="section">
 
-    <form method="GET" action="{% url 'search_movies' %}" class="mb-4">
+        <h1>Find a Movie</h1>
 
-        <div class="input-group">
+        <p class="text-secondary">
+            Search TMDB and add a movie to the Netxus community.
+        </p>
 
-            <input
-                type="text"
-                name="query"
-                class="form-control"
-                placeholder="Search for a movie..."
-                value="{{ query }}"
-            >
 
-            <button type="submit" class="btn btn-primary">
-                Search
-            </button>
+        <form
+            method="GET"
+            action="{% url 'search_movies' %}"
+            class="search-box mt-4"
+        >
 
-        </div>
+            <div class="input-group">
 
-    </form>
+                <input
+                    type="text"
+                    name="query"
+                    class="form-control"
+                    placeholder="Search for a movie..."
+                    value="{{ query }}"
+                >
+
+                <button
+                    type="submit"
+                    class="btn btn-netxus"
+                >
+                    Search
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
 
     {% if query %}
 
-        <h2>Results for "{{ query }}"</h2>
+        <section class="section pt-3">
 
-        <div class="row">
+            <div class="section-header">
 
-            {% for movie in results %}
+                <div>
 
-                <div class="col-md-4 mb-4">
+                    <h2 class="section-title">
+                        Results
+                    </h2>
 
-                    <div class="card h-100">
+                    <div class="section-line"></div>
 
-                        {% if movie.poster_path %}
+                </div>
 
-                            <img
-                                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                                class="card-img-top"
-                                alt="{{ movie.title }}"
-                            >
+                <span class="text-secondary">
+                    "{{ query }}"
+                </span>
 
-                        {% endif %}
+            </div>
 
-                        <div class="card-body">
 
-                            <h5 class="card-title">
-                                {{ movie.title }}
-                            </h5>
+            <div class="row g-4">
 
-                            {% if movie.release_date %}
-                                <p class="card-text">
-                                    Release Year: {{ movie.release_date|slice:":4" }}
-                                </p>
+                {% for movie in results %}
+
+                    <div class="col-6 col-md-4 col-lg-3">
+
+                        <div class="movie-card">
+
+                            {% if movie.poster_path %}
+
+                                <img
+                                    src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                    class="movie-poster"
+                                    alt="{{ movie.title }}"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="movie-poster d-flex align-items-center justify-content-center"
+                                    style="background:#202028;"
+                                >
+                                    <span class="text-secondary">
+                                        No Poster
+                                    </span>
+                                </div>
+
                             {% endif %}
 
-                            <p class="card-text">
-                                {{ movie.overview }}
-                            </p>
 
-                            <a 
-                                href="{% url 'add_movie' movie.id %}"
-                                class="btn btn-primary"
-                            >
-                                Add Movie
-                            </a>
+                            <div class="movie-card-body">
+
+                                <h5 class="movie-title">
+                                    {{ movie.title }}
+                                </h5>
+
+
+                                {% if movie.release_date %}
+
+                                    <p class="text-secondary mb-2">
+                                        {{ movie.release_date|slice:":4" }}
+                                    </p>
+
+                                {% endif %}
+
+
+                                <p class="movie-description">
+                                    {{ movie.overview }}
+                                </p>
+
+
+                                <a
+                                    href="{% url 'add_movie' movie.id %}"
+                                    class="btn btn-netxus w-100 mt-2"
+                                >
+                                    Add to Netxus
+                                </a>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                {% empty %}
 
-            {% empty %}
+                    <div class="col-12">
 
-                <p>No movies found.</p>
+                        <div class="post-card text-center py-5">
 
-            {% endfor %}
+                            <h3>No movies found</h3>
 
-        </div>
+                            <p class="text-secondary">
+                                Try searching for another movie.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
 
     {% endif %}
 

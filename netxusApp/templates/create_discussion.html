@@ -1,37 +1,190 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<section>
-    <h1>Create a New Discussion</h1>
-    <!-- Search Bar-->
-      <form class="d-flex me-3" role="search" method=POST action="{% url 'new_discussion' %}">
-        {% csrf_token %}
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search For Movies or Shows"
-          aria-label="Search"
-          name = "searched_api">
+<div class="container">
 
-        <button class="btn btn-outline-success" type="submit">
-          Search
-        </button>
-      </form>
-</section>
-<section>
-    <!--Results from api-->
+    <section class="section">
+
+        <div class="mb-4">
+
+            <p class="text-danger fw-bold text-uppercase">
+                Community
+            </p>
+
+            <h1>Create a Discussion</h1>
+
+            <p class="text-secondary">
+                Search for a movie or TV show to start a community discussion.
+            </p>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <form
+                method="POST"
+                action="{% url 'new_discussion' %}"
+            >
+
+                {% csrf_token %}
+
+                <div class="input-group">
+
+                    <input
+                        class="form-control"
+                        type="search"
+                        placeholder="Search for movies or shows..."
+                        name="searched_api"
+                    >
+
+                    <button
+                        class="btn btn-netxus"
+                        type="submit"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
     {% if movie_results or show_results %}
-        <h2>Choose Your Movie or Show</h2>
-        <h6>Movies</h6>
-        {% for result in movie_results %}
-            <p>{{ result.0 }} (ID: {{ result.1 }})</p>
-        {% endfor %}
-        <h6>Shows</h6>
-        {% for result in show_results %}
-            <p>{{ result.0 }} (ID: {{ result.1 }})</p>
-        {% endfor %}
+
+        <!-- MOVIES -->
+
+        {% if movie_results %}
+
+            <section class="section pt-3">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2 class="section-title">
+                            Movies
+                        </h2>
+
+                        <div class="section-line"></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    {% for result in movie_results %}
+
+                        <div class="col-6 col-md-4 col-lg-3">
+
+                            <div class="movie-card">
+
+                                {% if result.2 %}
+
+                                    <img
+                                        src="https://image.tmdb.org/t/p/w500{{ result.2 }}"
+                                        class="movie-poster"
+                                        alt="{{ result.0 }}"
+                                    >
+
+                                {% endif %}
+
+                                <div class="movie-card-body">
+
+                                    <h5 class="movie-title">
+                                        {{ result.0 }}
+                                    </h5>
+
+                                    <a
+                                        href="{% url 'add_movie' result.1 %}"
+                                        class="btn btn-netxus w-100 mt-3"
+                                    >
+                                        Add Movie
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+
+        <!-- SHOWS -->
+
+        {% if show_results %}
+
+            <section class="section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2 class="section-title">
+                            TV Shows
+                        </h2>
+
+                        <div class="section-line"></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    {% for result in show_results %}
+
+                        <div class="col-6 col-md-4 col-lg-3">
+
+                            <div class="movie-card">
+
+                                {% if result.2 %}
+
+                                    <img
+                                        src="https://image.tmdb.org/t/p/w500{{ result.2 }}"
+                                        class="movie-poster"
+                                        alt="{{ result.0 }}"
+                                    >
+
+                                {% endif %}
+
+                                <div class="movie-card-body">
+
+                                    <h5 class="movie-title">
+                                        {{ result.0 }}
+                                    </h5>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+        {% endif %}
 
     {% endif %}
-</section>
+
+</div>
 
 {% endblock %}

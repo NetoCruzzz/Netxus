@@ -36,7 +36,7 @@ urlpatterns = [
     path('movies/add/<int:tmdb_id>/', views.add_movie, name='add_movie'),
 
     # Discussion & search routes
-    path("discussion/<slug:id>/", views.discussion_page, name="discussion"),
+    path("discussion/<str:id>/", views.discussion_page, name="discussion"),
     path("new_discussion/", views.new_discussion, name="new_discussion"),
     path("search_results/", views.search_results, name="search_results"),
 ]

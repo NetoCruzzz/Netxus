@@ -2,27 +2,64 @@
 
 {% block content %}
 
-<div class="container mt-4">
-    
-    <h2>Login</h2>
-    
-    <form method="POST">
-        
-        {% csrf_token %}
-        
-        {{ form.as_p }}
-        
-        <button type="submit" class="btn btn-primary">
-            Login
-        </button>
-    </form>
+<div class="container">
 
-    <p class="mt-3">
-        Don't have an account?
-        <a href="{% url 'register' %}" class="btn btn-outline-secondary">
-            Register
-        </a>
-    </p>
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-5">
+
+            <div class="section">
+
+                <div class="profile-card">
+
+                    <div class="text-center mb-4">
+
+                        <h1>Welcome Back</h1>
+
+                        <p class="text-secondary">
+                            Log in to continue to Netxus.
+                        </p>
+
+                    </div>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <button
+                            type="submit"
+                            class="btn btn-netxus w-100 mt-3"
+                        >
+                            Login
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-4">
+
+                        <span class="text-secondary">
+                            Don't have an account?
+                        </span>
+
+                        <a
+                            href="{% url 'register' %}"
+                            class="text-danger"
+                        >
+                            Register
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
+
 {% endblock %}

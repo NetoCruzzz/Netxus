@@ -1,15 +1,107 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="container">
+
+    <section class="section">
+
         {% if searched %}
-            <h2>Search Results for "{{ searched }}"</h2>
-            <br/>
+
+            <h1>Search Results</h1>
+
+            <p class="text-secondary">
+                Results for "{{ searched }}"
+            </p>
+
+            <div class="section-line mb-4"></div>
+
+
             {% for discussion in discussions %}
-                <a href="{% url 'discussion' id=discussion.id %}">{{ discussion.name }}</a>
-                <p>{{ discussion.description }}</p>
+
+                <a
+                    href="{% url 'discussion' id=discussion.id %}"
+                    class="d-block"
+                >
+
+                    <div class="post-card">
+
+                        <div class="row align-items-center">
+
+                            {% if discussion.poster %}
+
+                                <div class="col-auto">
+
+                                    <img
+                                        src="{{ discussion.poster }}"
+                                        style="
+                                            width: 80px;
+                                            height: 120px;
+                                            object-fit: cover;
+                                            border-radius: 7px;
+                                        "
+                                        alt="{{ discussion.name }}"
+                                    >
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="col">
+
+                                <h3 class="post-title">
+                                    {{ discussion.name }}
+                                </h3>
+
+                                <p class="movie-description mt-2">
+                                    {{ discussion.description }}
+                                </p>
+
+                                <span class="movie-link">
+                                    View Discussion →
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+
+            {% empty %}
+
+                <div class="post-card text-center py-5">
+
+                    <h3>No discussions found</h3>
+
+                    <p class="text-secondary">
+                        Try searching for another movie.
+                    </p>
+
+                </div>
+
             {% endfor %}
 
+
         {% else %}
-            <h2>No search query provided.</h2>
+
+            <div class="post-card text-center py-5">
+
+                <h2>No search query provided.</h2>
+
+                <p class="text-secondary">
+                    Search for a movie or discussion above.
+                </p>
+
+            </div>
+
         {% endif %}
+
+    </section>
+
+</div>
+
 {% endblock %}
